@@ -12,5 +12,6 @@ namespace CrudAPI.Models
         public string? MiddleName { get; set; }
         [Required]
         public string LastName { get; set; }
+ 
     }
 }

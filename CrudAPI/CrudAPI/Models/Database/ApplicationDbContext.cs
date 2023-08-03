@@ -16,8 +16,9 @@ namespace CrudAPI.Models.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            
+              
             base.OnModelCreating(builder);
+
             builder.ApplyConfiguration(new AccountTypeConfiguration());
             builder.ApplyConfiguration(new PaymentConfiguration());
             
@@ -26,7 +27,6 @@ namespace CrudAPI.Models.Database
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<Person>Persons { get; set; }
         public DbSet<BankTransaction> BankTransactions { get; set; }
-
         public DbSet<PaymentMethod> PaymentMethods { get; set; } 
     }
 }

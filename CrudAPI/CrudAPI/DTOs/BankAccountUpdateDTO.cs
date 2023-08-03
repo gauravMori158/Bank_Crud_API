@@ -7,7 +7,7 @@ namespace CrudAPI.DTOs
         public PersonDTO Person { get; set; }
 
         public int AccountTypeId { get; set; }
-        DateTime? ClosingDate { get; set; }
+        DateTime ClosingDate { get; set; }
      
     }
 }

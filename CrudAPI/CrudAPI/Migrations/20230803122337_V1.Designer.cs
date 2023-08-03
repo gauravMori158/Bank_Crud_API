@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230803105903_V1")]
+    [Migration("20230803122337_V1")]
     partial class V1
     {
         /// <inheritdoc />
@@ -100,28 +100,21 @@ namespace CrudAPI.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BankAccountId")
+                    b.Property<int>("Category")
                         .HasColumnType("int");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PaymentMethodId")
+                    b.Property<int>("PersonId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankAccountId");
-
-                    b.HasIndex("PaymentMethodId");
+                    b.HasIndex("PersonId");
 
                     b.ToTable("BankTransactions");
                 });
@@ -405,21 +398,13 @@ namespace CrudAPI.Migrations
 
             modelBuilder.Entity("CrudAPI.Models.BankTransaction", b =>
                 {
-                    b.HasOne("CrudAPI.Models.BankAccount", "BankAccount")
+                    b.HasOne("CrudAPI.Models.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("BankAccountId")
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CrudAPI.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BankAccount");
-
-                    b.Navigation("PaymentMethod");
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

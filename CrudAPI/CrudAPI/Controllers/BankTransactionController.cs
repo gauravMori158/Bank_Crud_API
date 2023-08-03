@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CrudAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+     
     public class BankTransactionController : BaseApiController
     {
+
     }
 }
