@@ -8,7 +8,13 @@ namespace CrudAPI.Configuration
     {
         public void Configure(EntityTypeBuilder<AccountType> builder)
         {
-            builder.HasData(
+            builder.HasData(GetAccountTypes());
+               
+        }
+
+        private List<AccountType> GetAccountTypes()
+        {
+            return new List<AccountType> { 
                 new AccountType()
                 {
                     Id = 1,
@@ -18,7 +24,8 @@ namespace CrudAPI.Configuration
                {
                    Id = 2,
                    Name = "Asset"
-               });
+               }
+        };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using CrudAPI.Configuration;
 using CrudAPI.DTOs;
 using CrudAPI.Models;
 using CrudAPI.Models.Database;
@@ -10,9 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BankAccountController : ControllerBase
+     
+    public class BankAccountController : BaseApiController
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -26,16 +26,17 @@ namespace CrudAPI.Controllers
         [ActionName("Create Account")]
         public async Task<IActionResult> Create(BankAccountDTO bankAccountDTO)
         {
-            var  bankAccount = _mapper.Map<BankAccount>(bankAccountDTO);
+           var bankAccount = _mapper.Map<BankAccount>(bankAccountDTO);
 
             await _context.BankAccounts.AddAsync(bankAccount);
 
             int acn = await _context.SaveChangesAsync();
 
-            if(acn >0)
+            if (acn > 0)
                 return Ok("User Added Successfully!");
             return BadRequest("Error While Adding User !");
         }
+
 
         [HttpGet]
         [ActionName("Get Account")]
@@ -43,7 +44,7 @@ namespace CrudAPI.Controllers
         { 
             if(id is  null)
             {
-               var accountList = await _context.BankAccounts.ToListAsync();
+               var accountList = await _context.BankAccounts.Include(x=>x.Person).ToListAsync();
                 if (accountList == null)
                     return BadRequest("Accounts does not exist.");
 
@@ -51,7 +52,7 @@ namespace CrudAPI.Controllers
                 return Ok(mappedLisy);
             }
 
-            var account = await _context.BankAccounts.FirstOrDefaultAsync(a => a.Id == id);
+            var account = await _context.BankAccounts.Include(x=>x.Person).FirstOrDefaultAsync(a => a.Id == id);
             if (account == null)
                 return BadRequest("Account does not exist.");
             var mappedAccount = _mapper.Map<BankAccountDTO>(account);
@@ -61,7 +62,7 @@ namespace CrudAPI.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateAccount(int id,  BankAccountUpdateDTO bankAccountDTO)
         {
-            var account = await _context.BankAccounts.FirstOrDefaultAsync(x => x.Id == id);
+            var account = await _context.BankAccounts.Include(x=>x.Person).FirstOrDefaultAsync(x => x.Id == id);
              
             _mapper.Map(bankAccountDTO, account);
              
@@ -75,7 +76,7 @@ namespace CrudAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id )
         {
-            var account = await _context.BankAccounts.FirstOrDefaultAsync(x => x.Id == id);
+            var account = await _context.BankAccounts.Include(x => x.Person).FirstOrDefaultAsync(x => x.Id == id);
             _context.BankAccounts.Remove(account);
             int acn = await _context.SaveChangesAsync();
             if (acn >0) 

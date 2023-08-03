@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrudAPI.Models
 {
-    public class BankTransaction : CommonProp
+    public class BankTransaction : CommonEntity
     {
-       
+      
         [Required]
-        public int TransactionType{ get; set; } //Credit or Debit
+        public string TransactionType{ get; set; } //Credit or Debit
         [Required]
-        public int Category { get; set; } //Opening Balance, Bank Interest, Bank Charges and Normal Transactions
+        public string Category { get; set; } //Opening Balance, Bank Interest, Bank Charges and Normal Transactions
         [Required]
         [RegularExpression(@"^\d+(\.\d{1,6})?$", ErrorMessage = "Amount should have up to 6 decimal places.")]
         public decimal Amount { get; set; }
@@ -23,6 +23,7 @@ namespace CrudAPI.Models
         public int BankAccountId { get; set; }
         [Required]
         public BankAccount BankAccount { get; set; }
- 
+        
+
     }
 }

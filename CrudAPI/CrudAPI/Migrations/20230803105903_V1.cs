@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CrudAPI.Migrations
 {
     /// <inheritdoc />
@@ -77,29 +79,18 @@ namespace CrudAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BankAccounts",
+                name: "Persons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    PersonId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountNumber = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
-                    OpeningDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ClosingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    TotalBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AccountTypeId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BankAccounts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BankAccounts_AccountTypes_AccountTypeId",
-                        column: x => x.AccountTypeId,
-                        principalTable: "AccountTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Persons", x => x.PersonId);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,13 +200,37 @@ namespace CrudAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BankAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonId = table.Column<int>(type: "int", nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    OpeningDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ClosingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TotalBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AccountTypeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BankAccounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BankAccounts_Persons_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Persons",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BankTransactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TransactionType = table.Column<int>(type: "int", nullable: false),
-                    Category = table.Column<int>(type: "int", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentMethodId = table.Column<int>(type: "int", nullable: false),
@@ -236,6 +251,27 @@ namespace CrudAPI.Migrations
                         principalTable: "PaymentMethods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AccountTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Liability" },
+                    { 2, "Asset" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PaymentMethods",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Cash" },
+                    { 2, "Cheque" },
+                    { 3, "NEFT" },
+                    { 4, "RTGS" },
+                    { 5, "Other" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -278,9 +314,9 @@ namespace CrudAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BankAccounts_AccountTypeId",
+                name: "IX_BankAccounts_PersonId",
                 table: "BankAccounts",
-                column: "AccountTypeId");
+                column: "PersonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankTransactions_BankAccountId",
@@ -296,6 +332,9 @@ namespace CrudAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AccountTypes");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -327,7 +366,7 @@ namespace CrudAPI.Migrations
                 name: "PaymentMethods");
 
             migrationBuilder.DropTable(
-                name: "AccountTypes");
+                name: "Persons");
         }
     }
 }

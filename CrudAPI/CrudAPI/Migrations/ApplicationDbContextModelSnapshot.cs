@@ -70,26 +70,18 @@ namespace CrudAPI.Migrations
                     b.Property<DateTime?>("ClosingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("OpeningDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("TotalBalance")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountTypeId");
+                    b.HasIndex("PersonId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -108,8 +100,9 @@ namespace CrudAPI.Migrations
                     b.Property<int>("BankAccountId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
@@ -117,8 +110,9 @@ namespace CrudAPI.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("int");
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -171,6 +165,30 @@ namespace CrudAPI.Migrations
                             Id = 5,
                             Name = "Other"
                         });
+                });
+
+            modelBuilder.Entity("CrudAPI.Models.Person", b =>
+                {
+                    b.Property<int>("PersonId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonId"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PersonId");
+
+                    b.ToTable("Persons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -373,11 +391,13 @@ namespace CrudAPI.Migrations
 
             modelBuilder.Entity("CrudAPI.Models.BankAccount", b =>
                 {
-                    b.HasOne("CrudAPI.Models.AccountType", null)
-                        .WithMany("BankAccount")
-                        .HasForeignKey("AccountTypeId")
+                    b.HasOne("CrudAPI.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("CrudAPI.Models.BankTransaction", b =>
@@ -448,11 +468,6 @@ namespace CrudAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CrudAPI.Models.AccountType", b =>
-                {
-                    b.Navigation("BankAccount");
                 });
 #pragma warning restore 612, 618
         }

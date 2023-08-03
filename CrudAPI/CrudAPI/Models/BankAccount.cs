@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrudAPI.Models
 {
-    public class BankAccount : Base_BankAccount_Transaction 
+    public class BankAccount : CommonEntity 
     {
-       
+        [ForeignKey("PersonId")]
+        public virtual Person Person { get; set; }
+
         [Required]
         [StringLength(8,MinimumLength =8,ErrorMessage ="Account Number Must Have 8 Digits")]
          

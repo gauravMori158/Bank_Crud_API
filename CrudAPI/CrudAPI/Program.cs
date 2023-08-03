@@ -1,3 +1,5 @@
+using CrudAPI.Configuration;
+using CrudAPI.Middleware;
 using CrudAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<ExceptionMiddleware>();
+
+builder.Services.AddScoped<BaseApiController>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +27,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();   
 
 app.UseAuthorization();
 

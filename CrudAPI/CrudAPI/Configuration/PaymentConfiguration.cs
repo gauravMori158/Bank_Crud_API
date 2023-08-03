@@ -8,7 +8,13 @@ namespace CrudAPI.Configuration
     {
         public void Configure(EntityTypeBuilder<PaymentMethod> builder)
         {
-            builder.HasData(
+            builder.HasData(GetPaymentMethods());
+        }
+
+        private List<PaymentMethod> GetPaymentMethods()
+        {
+            var result = new List<PaymentMethod>()
+            {
                 new PaymentMethod()
                 {
                     Id = 1,
@@ -34,7 +40,8 @@ namespace CrudAPI.Configuration
                     Id = 5,
                     Name = "Other"
                 }
-                );
+            };
+            return result;
         }
     }
 }

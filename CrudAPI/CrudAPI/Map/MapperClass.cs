@@ -10,6 +10,8 @@ namespace CrudAPI.Map
         {
                 CreateMap<BankAccountUpdateDTO, BankAccount>().ReverseMap() ;
                 CreateMap<BankAccountDTO, BankAccount>().ReverseMap() ;
+                CreateMap<PersonDTO, Person>().ReverseMap() ;
+
         }
     }
 }

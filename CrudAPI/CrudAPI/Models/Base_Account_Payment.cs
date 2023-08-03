@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrudAPI.Models
 {
-    public class Base_Account_Payment : CommonProp
+    public class Base_Account_Payment : CommonEntity
     {
        
         [Required]

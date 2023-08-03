@@ -2,8 +2,11 @@
 
 namespace CrudAPI.DTOs
 {
-    public class BankAccountUpdateDTO : BankAccoutBaseDTO
+    public class BankAccountUpdateDTO 
     {
+        public PersonDTO Person { get; set; }
+
+        public int AccountTypeId { get; set; }
         DateTime? ClosingDate { get; set; }
      
     }

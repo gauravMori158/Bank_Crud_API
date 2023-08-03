@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrudAPI.Models
 {
-    public class CommonProp
+    public class CommonEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
