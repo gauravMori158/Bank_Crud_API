@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-
+builder.Services.AddAutoMapper(typeof(Program));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

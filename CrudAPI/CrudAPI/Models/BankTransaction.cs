@@ -7,14 +7,9 @@ namespace CrudAPI.Models
     {
        
         [Required]
-        public string FirstName{ get; set; }
-        public string? MiddleName{ get; set; }
+        public int TransactionType{ get; set; } //Credit or Debit
         [Required]
-        public string LastName{ get; set; }
-        [Required]
-        public string TransactionType{ get; set; } //Credit or Debit
-        [Required]
-        public string Category { get; set; } //Opening Balance, Bank Interest, Bank Charges and Normal Transactions
+        public int Category { get; set; } //Opening Balance, Bank Interest, Bank Charges and Normal Transactions
         [Required]
         [RegularExpression(@"^\d+(\.\d{1,6})?$", ErrorMessage = "Amount should have up to 6 decimal places.")]
         public decimal Amount { get; set; }

@@ -3,14 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrudAPI.Models
 {
-    public class BankAccount : CommonProp
+    public class BankAccount : Base_BankAccount_Transaction 
     {
        
-        [Required]
-        public string FirstName { get; set; }
-        public string? MiddleName{ get; set; }
-        [Required]
-        public string LastName { get; set; }
         [Required]
         [StringLength(8,MinimumLength =8,ErrorMessage ="Account Number Must Have 8 Digits")]
          
@@ -20,14 +15,10 @@ namespace CrudAPI.Models
 
         public DateTime? ClosingDate{ get; set; }
          
-        public decimal TotalBalance { get; set; }
+        public decimal? TotalBalance { get; set; }
         [Required]
         public int AccountTypeId { get; set; }
-        [Required]
-        public AccountType AccountType { get; set; }
-
-
-
+        
 
     }
 }

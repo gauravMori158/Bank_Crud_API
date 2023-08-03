@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CrudAPI.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,13 @@ namespace CrudAPI.Models.Database
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> option):base(option)
         {
                 
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new AccountTypeConfiguration());
+            builder.ApplyConfiguration(new PaymentConfiguration());
         }
         public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }

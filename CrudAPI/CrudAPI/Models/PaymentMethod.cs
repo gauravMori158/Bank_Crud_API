@@ -2,10 +2,8 @@
 
 namespace CrudAPI.Models
 {
-    public class PaymentMethod : CommonProp
+    public class PaymentMethod : Base_Account_Payment
     {
-      
-        [Required]
-        public string Name { get; set; }
+           
     }
 }

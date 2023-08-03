@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrudAPI.Models
 {
-    public class AccountType : Base_Account_Payment
+    public class Base_Account_Payment : CommonProp
     {
-        public ICollection<BankAccount>  BankAccount { get; set; }
-
+       
+        [Required]
+        public string Name { get; set; }
     }
 }
