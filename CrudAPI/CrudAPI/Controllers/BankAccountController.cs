@@ -46,13 +46,16 @@ namespace CrudAPI.Controllers
                var accountList = await _context.BankAccounts.ToListAsync();
                 if (accountList == null)
                     return BadRequest("Accounts does not exist.");
-                return Ok(accountList);
+
+                var mappedLisy = _mapper.Map<List<BankAccountDTO>>(accountList);
+                return Ok(mappedLisy);
             }
 
             var account = await _context.BankAccounts.FirstOrDefaultAsync(a => a.Id == id);
             if (account == null)
                 return BadRequest("Account does not exist.");
-            return Ok(account);
+            var mappedAccount = _mapper.Map<BankAccountDTO>(account);
+            return Ok(mappedAccount);
         }
 
         [HttpPatch]
