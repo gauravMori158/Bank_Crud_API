@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230803122707_V2")]
+    [Migration("20230804093618_V2")]
     partial class V2
     {
         /// <inheritdoc />
@@ -62,10 +62,8 @@ namespace CrudAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AccountNumber")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                    b.Property<long>("AccountNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("AccountTypeId")
                         .HasColumnType("int");
@@ -79,10 +77,12 @@ namespace CrudAPI.Migrations
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("TotalBalance")
+                    b.Property<decimal>("TotalBalance")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountTypeId");
 
                     b.HasIndex("PersonId");
 
@@ -97,8 +97,8 @@ namespace CrudAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccountTypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("AccountNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -119,8 +119,6 @@ namespace CrudAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccountTypeId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -194,7 +192,7 @@ namespace CrudAPI.Migrations
 
                     b.HasKey("PersonId");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Person");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -397,26 +395,9 @@ namespace CrudAPI.Migrations
 
             modelBuilder.Entity("CrudAPI.Models.BankAccount", b =>
                 {
-                    b.HasOne("CrudAPI.Models.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("CrudAPI.Models.BankTransaction", b =>
-                {
                     b.HasOne("CrudAPI.Models.AccountType", "AccountType")
-                        .WithMany()
+                        .WithMany("BankAccounts")
                         .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CrudAPI.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -427,6 +408,23 @@ namespace CrudAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("AccountType");
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("CrudAPI.Models.BankTransaction", b =>
+                {
+                    b.HasOne("CrudAPI.Models.PaymentMethod", "PaymentMethod")
+                        .WithMany("BankTransactions")
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CrudAPI.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PaymentMethod");
 
@@ -482,6 +480,16 @@ namespace CrudAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CrudAPI.Models.AccountType", b =>
+                {
+                    b.Navigation("BankAccounts");
+                });
+
+            modelBuilder.Entity("CrudAPI.Models.PaymentMethod", b =>
+                {
+                    b.Navigation("BankTransactions");
                 });
 #pragma warning restore 612, 618
         }

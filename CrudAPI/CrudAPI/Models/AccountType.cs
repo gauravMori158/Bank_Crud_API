@@ -5,6 +5,7 @@ namespace CrudAPI.Models
 {
     public class AccountType : Base_Account_Payment
     {
-     
+        public ICollection<BankAccount> BankAccounts { get; set; }
+
     }
 }

@@ -17,12 +17,17 @@ namespace CrudAPI.Models
         [Required]
         public DateTime TransactionDate { get; set; }
 
+        [Required]
+        [Range(10000000, 99999999, ErrorMessage = "Account Number must be an 8-digit number.")]
+        public long AccountNumber { get; set; }
+
         [ForeignKey("PersonId")]
-        public virtual Person Person { get; set; }
+        public  Person Person { get; set; }
 
-        public virtual AccountType AccountType { get; set; }
-
-        public virtual PaymentMethod PaymentMethod { get; set; }
+        public int PaymentMethodId { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
+        
+        
 
     }
 }

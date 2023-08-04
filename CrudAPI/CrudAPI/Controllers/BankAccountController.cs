@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Azure;
 using CrudAPI.Configuration;
-using CrudAPI.DTOs;
+using CrudAPI.DTOs.BankAccount;
 using CrudAPI.Models;
 using CrudAPI.Models.Database;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudAPI.Controllers
 {
-     
+
     public class BankAccountController : BaseApiController
     {
         private readonly ApplicationDbContext _context;
@@ -44,7 +44,7 @@ namespace CrudAPI.Controllers
         { 
             if(id is  null)
             {
-               var accountList = await _context.BankAccounts.Include(x=>x.Person).ToListAsync();
+               var accountList = await _context.BankAccounts.Include(x=>x.Person).Include(x=>x.AccountType).ToListAsync();
                 if (accountList == null)
                     return BadRequest("Accounts does not exist.");
 
@@ -52,7 +52,7 @@ namespace CrudAPI.Controllers
                 return Ok(mappedLisy);
             }
 
-            var account = await _context.BankAccounts.Include(x=>x.Person).FirstOrDefaultAsync(a => a.Id == id);
+            var account = await _context.BankAccounts.Include(x=>x.Person).Include(x => x.AccountType).FirstOrDefaultAsync(a => a.Id == id);
             if (account == null)
                 return BadRequest("Account does not exist.");
             var mappedAccount = _mapper.Map<BankAccountDTO>(account);
