@@ -33,8 +33,8 @@ namespace CrudAPI.Controllers
 
                 return Ok(mappedList);
             }
-
-            var transaction = await _context.BankTransactions.FirstOrDefaultAsync(x => x.Id == id);
+             
+           var transaction = await _context.BankTransactions.FirstOrDefaultAsync(x => x.Id == id);
             if (transaction == null)
                 return BadRequest("Empty");
 
