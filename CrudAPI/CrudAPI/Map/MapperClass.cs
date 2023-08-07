@@ -22,7 +22,8 @@ namespace CrudAPI.Map
                     opt=>opt.MapFrom(src=>src.PaymentMethod.Id)
                     );
 
-                CreateMap<AccountTypeDTO,AccountType>().ReverseMap() ;  
+                CreateMap<AccountTypeDTO,AccountType>().ReverseMap() ;
+            CreateMap<PaymentMethodDTO, PaymentMethod>().ReverseMap();
             
         }
     }
