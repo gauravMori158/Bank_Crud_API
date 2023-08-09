@@ -4,6 +4,7 @@ using CrudAPI.Configuration;
 using CrudAPI.DTOs.BankAccount;
 using CrudAPI.Models;
 using CrudAPI.Models.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudAPI.Controllers
 {
-
+    [Authorize]
     public class BankAccountController : BaseApiController
     {
         private readonly ApplicationDbContext _context;
