@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230809063555_V4")]
-    partial class V4
+    [Migration("20230810071735_V1")]
+    partial class V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -224,24 +224,24 @@ namespace CrudAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fdeb8265-cad2-4718-83a5-16fb6a96a232",
+                            Id = "50e4b27c-5279-42d2-a613-475624ee72e6",
                             ConcurrencyStamp = "1",
-                            Name = "HR",
-                            NormalizedName = "HR"
-                        },
-                        new
-                        {
-                            Id = "4088a321-6d9c-410d-8f1d-8132eedcc5d7",
-                            ConcurrencyStamp = "2",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "d91c618d-ddef-468b-814b-d9b236ca41b3",
-                            ConcurrencyStamp = "3",
+                            Id = "6e8a1b05-43b4-442d-b436-e81491a98fcb",
+                            ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = "31ec1f5f-6362-4416-9f33-b15aa2f4dc9e",
+                            ConcurrencyStamp = "3",
+                            Name = "HR",
+                            NormalizedName = "HR"
                         });
                 });
 

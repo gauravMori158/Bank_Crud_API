@@ -1,5 +1,6 @@
-﻿using CrudAPI.Configuration;
-using CrudAPI.Models.Authentication;
+﻿using CrudAPI.Models;
+using CrudAPI.Models.Authentication.Login;
+using CrudAPI.Models.Authentication.SignUp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-
-namespace CrudAPI.Controllers
+namespace IdentityCoreAuthAndAutho.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,15 +19,18 @@ namespace CrudAPI.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthenticationController> _logger;
 
-        public AuthenticationController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+
+        public AuthenticationController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILogger<AuthenticationController> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _logger = logger;
         }
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] SignupModel registerUser, string role)
+        public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
             var userExist = await _userManager.FindByEmailAsync(registerUser.EmailAddress);
             if (userExist != null)
@@ -40,7 +43,7 @@ namespace CrudAPI.Controllers
             {
                 Email = registerUser.EmailAddress,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerUser.Username,
+                UserName = registerUser.UserName,
             };
 
             if (await _roleManager.RoleExistsAsync(role))
@@ -60,9 +63,6 @@ namespace CrudAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Role is Not Exist !" });
             }
-
-
-
         }
 
         [HttpPost]
@@ -70,7 +70,7 @@ namespace CrudAPI.Controllers
 
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            var user = await _userManager.FindByNameAsync(loginModel.Username);
+            var user = await _userManager.FindByNameAsync(loginModel.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
                 var authClaim = new List<Claim>
@@ -100,6 +100,7 @@ namespace CrudAPI.Controllers
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)
         {
+            _logger.LogInformation("\n\n\n\n\n\n\n" + DateTime.Now.ToString() + "\n\n\n\n\n\n\n\n");
             var authSignInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],

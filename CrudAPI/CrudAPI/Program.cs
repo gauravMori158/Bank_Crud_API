@@ -1,5 +1,4 @@
-using CrudAPI.Configuration;
-using CrudAPI.Middleware;
+using CrudAPI.Models;
 using CrudAPI.Models.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -8,13 +7,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAutoMapper(typeof(Program));
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
     option =>
@@ -45,15 +43,17 @@ builder.Services.AddSwaggerGen(
     });
     });
 
- 
-builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddScoped<ExceptionMiddleware>();
 
-builder.Services.AddScoped<BaseApiController>();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+var services = builder.Services;
+services.AddMvc();
 
-builder.Services.AddAuthentication(option =>
+//EF
+services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+
+//Identity
+services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -73,6 +73,7 @@ builder.Services.AddAuthentication(option =>
 
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -83,9 +84,21 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<ExceptionMiddleware>();   
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
+
+
+
+
+
+
+
+
+
+
+
+

@@ -206,10 +206,10 @@ namespace CrudAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PersonId = table.Column<int>(type: "int", nullable: false),
-                    AccountNumber = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    AccountNumber = table.Column<long>(type: "bigint", nullable: false),
                     OpeningDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClosingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    TotalBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TotalBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     AccountTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -239,7 +239,7 @@ namespace CrudAPI.Migrations
                     Category = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountNumber = table.Column<long>(type: "bigint", nullable: false),
                     PersonId = table.Column<int>(type: "int", nullable: false),
                     PaymentMethodId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -267,6 +267,16 @@ namespace CrudAPI.Migrations
                 {
                     { 1, "Liability" },
                     { 2, "Asset" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "31ec1f5f-6362-4416-9f33-b15aa2f4dc9e", "3", "HR", "HR" },
+                    { "50e4b27c-5279-42d2-a613-475624ee72e6", "1", "Admin", "Admin" },
+                    { "6e8a1b05-43b4-442d-b436-e81491a98fcb", "2", "User", "User" }
                 });
 
             migrationBuilder.InsertData(

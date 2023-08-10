@@ -221,24 +221,24 @@ namespace CrudAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fdeb8265-cad2-4718-83a5-16fb6a96a232",
+                            Id = "e9f6c105-c044-4239-8aa4-a7a3892fbe57",
                             ConcurrencyStamp = "1",
-                            Name = "HR",
-                            NormalizedName = "HR"
-                        },
-                        new
-                        {
-                            Id = "4088a321-6d9c-410d-8f1d-8132eedcc5d7",
-                            ConcurrencyStamp = "2",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "d91c618d-ddef-468b-814b-d9b236ca41b3",
-                            ConcurrencyStamp = "3",
+                            Id = "db7d6bda-8849-44be-b9e3-b80da566b882",
+                            ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = "2f543be9-98a6-4331-8709-2e476fe5c5b0",
+                            ConcurrencyStamp = "3",
+                            Name = "HR",
+                            NormalizedName = "HR"
                         });
                 });
 
